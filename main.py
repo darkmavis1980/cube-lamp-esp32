@@ -83,6 +83,11 @@ last_button1_time = 0
 last_button2_time = 0
 debounce_delay = 200  # milliseconds
 
+# OLED display timeout
+DISPLAY_TIMEOUT = 30000  # milliseconds (30 seconds)
+last_activity_time = 0
+display_sleeping = False
+
 # Effect and color state
 current_effect = 0
 current_color_index = 0
@@ -114,11 +119,38 @@ effect_names = [
     "Off"
 ]
 
-def update_display():
-    """Update OLED display with current status"""
+def display_sleep():
+    """Turn off the OLED display to save its lifespan"""
+    global display_sleeping
+    if oled is None or display_sleeping:
+        return
+    try:
+        oled.fill(0)
+        oled.show()
+        oled.poweroff()
+        display_sleeping = True
+    except Exception as e:
+        print(f"Display sleep error: {e}")
+
+def display_wake():
+    """Wake the OLED display and refresh content"""
+    global display_sleeping, last_activity_time
     if oled is None:
         return
-    
+    if display_sleeping:
+        try:
+            oled.poweron()
+        except Exception as e:
+            print(f"Display wake error: {e}")
+    display_sleeping = False
+    last_activity_time = time.ticks_ms()
+    update_display()
+
+def update_display():
+    """Update OLED display with current status"""
+    if oled is None or display_sleeping:
+        return
+
     try:
         oled.fill(0)
         # Line 1: Effect name (truncate if needed)
@@ -185,33 +217,47 @@ def check_buttons():
     global current_effect, current_color_index
     global button1_last_state, button2_last_state
     global last_button1_time, last_button2_time
-    
+    global last_activity_time
+
     current_time = time.ticks_ms()
     button_pressed = False
-    
+
     # Check Button 1 (Mode)
     button1_state = button1.value()
     if button1_state == False and button1_last_state == True:
         if time.ticks_diff(current_time, last_button1_time) > debounce_delay:
-            current_effect = (current_effect + 1) % len(effect_names)
-            print(f"Effect changed to: {effect_names[current_effect]}")
-            clear()
-            update_display()
+            if display_sleeping:
+                display_wake()
+            else:
+                current_effect = (current_effect + 1) % len(effect_names)
+                print(f"Effect changed to: {effect_names[current_effect]}")
+                clear()
+                update_display()
+            last_activity_time = current_time
             last_button1_time = current_time
             button_pressed = True
     button1_last_state = button1_state
-    
+
     # Check Button 2 (Color)
     button2_state = button2.value()
     if button2_state == False and button2_last_state == True:
         if time.ticks_diff(current_time, last_button2_time) > debounce_delay:
-            current_color_index = (current_color_index + 1) % len(colors)
-            print(f"Color changed to: {color_names[current_color_index]}")
-            update_display()
+            if display_sleeping:
+                display_wake()
+            else:
+                current_color_index = (current_color_index + 1) % len(colors)
+                print(f"Color changed to: {color_names[current_color_index]}")
+                update_display()
+            last_activity_time = current_time
             last_button2_time = current_time
             button_pressed = True
     button2_last_state = button2_state
-    
+
+    # Check display timeout
+    if not display_sleeping and oled is not None:
+        if time.ticks_diff(current_time, last_activity_time) > DISPLAY_TIMEOUT:
+            display_sleep()
+
     return button_pressed
 
 # Effect functions
@@ -348,6 +394,7 @@ print(f"\nStarting with: {effect_names[current_effect]}, Color: {color_names[cur
 clear()
 time.sleep(2)  # Show startup message on OLED
 update_display()
+last_activity_time = time.ticks_ms()
 time.sleep(1)
 
 # Main loop
