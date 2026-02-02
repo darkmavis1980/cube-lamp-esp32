@@ -26,6 +26,8 @@ OLED Display shows:
 from machine import Pin, I2C
 from neopixel import NeoPixel
 import time
+import math
+import random
 
 # Try to import SSD1306 driver (needs to be uploaded to ESP32)
 try:
@@ -116,6 +118,8 @@ effect_names = [
     "Pulse",
     "Runner",
     "Aurora",
+    "Fire",
+    "Breathing",
     "Off"
 ]
 
@@ -160,16 +164,19 @@ def update_display():
         oled.text(f"Mode: {effect_text}", 0, 0)
         
         # Line 2: Color name
-        if current_effect != 1 and current_effect != 6 and current_effect != 7:  # Not Rainbow, Aurora, or Off
+        no_color_effects = {1, 6, 7, 9}  # Rainbow, Aurora, Fire, Off
+        if current_effect not in no_color_effects:
             color_text = color_names[current_color_index]
             oled.text(f"Color: {color_text}", 0, 12)
         elif current_effect == 1:
             oled.text("Color: Rainbow", 0, 12)
         elif current_effect == 6:
             oled.text("Color: Aurora", 0, 12)
+        elif current_effect == 7:
+            oled.text("Color: Fire", 0, 12)
 
         # Line 3: Status
-        if current_effect == 7:
+        if current_effect == 9:
             oled.text("Status: OFF", 0, 24)
         else:
             oled.text(f"LEDs: {LED_COUNT}", 0, 24)
@@ -375,6 +382,56 @@ def effect_aurora():
         offset = (offset + 3) % (palette_len * 256)
         time.sleep(0.03)
 
+def effect_fire():
+    """Fire effect — warm flickering flame simulation"""
+    # Per-LED heat values
+    heat = [0] * LED_COUNT
+    cooling = 10
+    sparking = 120
+    while True:
+        if check_buttons():
+            return
+        # Cool down each cell
+        for i in range(LED_COUNT):
+            heat[i] = max(0, heat[i] - random.randint(0, ((cooling * 10) // LED_COUNT) + 2))
+        # Heat drifts up
+        for i in range(LED_COUNT - 1, 1, -1):
+            heat[i] = (heat[i - 1] + heat[i - 2] + heat[i - 2]) // 3
+        # Random sparks near bottom
+        if random.randint(0, 255) < sparking:
+            y = random.randint(0, min(7, LED_COUNT - 1))
+            heat[y] = min(255, heat[y] + random.randint(160, 255))
+        # Map heat to color
+        for i in range(LED_COUNT):
+            t = heat[i]
+            if t > 170:
+                # Hot: yellow-white
+                r, g, b = 255, 255, min(255, (t - 170) * 3)
+            elif t > 85:
+                # Mid: orange-yellow
+                r, g, b = 255, min(255, (t - 85) * 3), 0
+            else:
+                # Cool: red-dark
+                r, g, b = min(255, t * 3), 0, 0
+            np[i] = (int(r * 0.3), int(g * 0.3), int(b * 0.3))
+        np.write()
+        time.sleep(0.02)
+
+def effect_breathing():
+    """Breathing effect — smooth sine-wave fade using the current color"""
+    r, g, b = colors[current_color_index]
+    step = 0
+    while True:
+        if check_buttons():
+            return
+        # Sine wave from 0.0 to 1.0
+        bright = (math.sin(step) + 1.0) / 2.0
+        set_all(r, g, b, brightness=bright * 0.3)
+        step += 0.04
+        if step > 2 * math.pi:
+            step -= 2 * math.pi
+        time.sleep(0.02)
+
 def effect_off():
     """Turn all LEDs off"""
     clear()
@@ -416,7 +473,11 @@ while True:
         effect_running_light()
     elif current_effect == 6:  # Aurora
         effect_aurora()
-    elif current_effect == 7:  # Off
+    elif current_effect == 7:  # Fire
+        effect_fire()
+    elif current_effect == 8:  # Breathing
+        effect_breathing()
+    elif current_effect == 9:  # Off
         effect_off()
     
     time.sleep(0.01)  # Small delay between effect loops
