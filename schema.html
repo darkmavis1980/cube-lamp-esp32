@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32-C3 NeoPixel Wiring Diagram</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 1200px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .component {
+            stroke: #333;
+            stroke-width: 2;
+            fill: #f8f9fa;
+        }
+        .usb-c { fill: #e3f2fd; }
+        .esp32 { fill: #fff3e0; }
+        .neopixel { fill: #f3e5f5; }
+        .capacitor { fill: #e8f5e9; }
+        .resistor { fill: #fff9c4; }
+        
+        .wire-5v { stroke: #f44336; stroke-width: 3; fill: none; }
+        .wire-gnd { stroke: #000; stroke-width: 3; fill: none; }
+        .wire-data { stroke: #2196f3; stroke-width: 3; fill: none; }
+        .wire-button { stroke: #ff9800; stroke-width: 3; fill: none; }
+        
+        .label {
+            font-family: monospace;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .label-5v { fill: #f44336; }
+        .label-gnd { fill: #000; }
+        .label-data { fill: #2196f3; }
+        
+        .component-label {
+            font-size: 16px;
+            font-weight: bold;
+            fill: #333;
+        }
+        .value-label {
+            font-size: 12px;
+            fill: #666;
+        }
+        .pin-label {
+            font-size: 11px;
+            fill: #444;
+        }
+        
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        .note h3 {
+            margin-top: 0;
+            color: #856404;
+        }
+        .note ul {
+            margin-bottom: 0;
+            color: #856404;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-line {
+            width: 40px;
+            height: 3px;
+        }
+        .legend-line.v5 { background: #f44336; }
+        .legend-line.gnd { background: #000; }
+        .legend-line.data { background: #2196f3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ESP32-C3 SuperMini + NeoPixel Wiring Diagram with Button Controls</h1>
+        <div class="subtitle">24 LEDs with USB-C Power Supply (5V, 2-3A) + Automatic Diode Protection + 2 Control Buttons</div>
+        
+        <svg viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg">
+            <!-- USB-C Breakout -->
+            <rect x="50" y="50" width="150" height="100" class="component usb-c" rx="5"/>
+            <text x="125" y="85" class="component-label" text-anchor="middle">USB-C</text>
+            <text x="125" y="105" class="component-label" text-anchor="middle">Breakout</text>
+            <text x="125" y="125" class="value-label" text-anchor="middle">5V @ 2-3A</text>
+            
+            <!-- USB-C Pins -->
+            <circle cx="80" cy="150" r="4" fill="#f44336"/>
+            <text x="90" y="155" class="pin-label">VBUS (5V)</text>
+            <circle cx="170" cy="150" r="4" fill="#000"/>
+            <text x="150" y="155" class="pin-label" text-anchor="end">GND</text>
+            
+            <!-- ESP32-C3 -->
+            <rect x="350" y="250" width="180" height="180" class="component esp32" rx="5"/>
+            <text x="440" y="290" class="component-label" text-anchor="middle">ESP32-C3</text>
+            <text x="440" y="310" class="component-label" text-anchor="middle">SuperMini</text>
+            
+            <!-- ESP32 Pins -->
+            <circle cx="360" cy="340" r="4" fill="#f44336"/>
+            <text x="370" y="345" class="pin-label">5V/VIN</text>
+            <circle cx="360" cy="360" r="4" fill="#000"/>
+            <text x="370" y="365" class="pin-label">GND</text>
+            <circle cx="520" cy="320" r="4" fill="#2196f3"/>
+            <text x="510" y="315" class="pin-label" text-anchor="end">GPIO8</text>
+            <circle cx="360" cy="380" r="4" fill="#ff9800"/>
+            <text x="370" y="385" class="pin-label">GPIO9</text>
+            <circle cx="360" cy="400" r="4" fill="#ff9800"/>
+            <text x="370" y="405" class="pin-label">GPIO10</text>
+            
+            <!-- Button 1 -->
+            <g>
+                <rect x="150" y="370" width="100" height="50" class="component" rx="3" fill="#ffebee"/>
+                <circle cx="175" cy="395" r="8" fill="#f44336" opacity="0.3"/>
+                <text x="200" y="390" class="component-label" text-anchor="middle">BTN1</text>
+                <text x="200" y="405" class="value-label" text-anchor="middle">Mode</text>
+            </g>
+            <circle cx="250" cy="395" r="4" fill="#ff9800"/>
+            <text x="255" y="398" class="pin-label">GPIO9</text>
+            <circle cx="170" cy="420" r="4" fill="#000"/>
+            <text x="175" y="423" class="pin-label">GND</text>
+            
+            <!-- Button 2 -->
+            <g>
+                <rect x="150" y="450" width="100" height="50" class="component" rx="3" fill="#ffebee"/>
+                <circle cx="175" cy="475" r="8" fill="#f44336" opacity="0.3"/>
+                <text x="200" y="470" class="component-label" text-anchor="middle">BTN2</text>
+                <text x="200" y="485" class="value-label" text-anchor="middle">Color</text>
+            </g>
+            <circle cx="250" cy="475" r="4" fill="#ff9800"/>
+            <text x="255" y="478" class="pin-label">GPIO10</text>
+            <circle cx="170" cy="500" r="4" fill="#000"/>
+            <text x="175" y="503" class="pin-label">GND</text>
+            
+            <!-- Resistor -->
+            <rect x="580" y="305" width="80" height="30" class="component resistor" rx="3"/>
+            <text x="620" y="323" class="component-label" text-anchor="middle">R1</text>
+            <text x="620" y="350" class="value-label" text-anchor="middle">470Ω</text>
+            
+            <!-- Diode -->
+            <g>
+                <rect x="240" y="310" width="80" height="40" class="component" rx="3" fill="#ffe0b2"/>
+                <!-- Diode symbol -->
+                <line x1="260" y1="320" x2="260" y2="340" stroke="#333" stroke-width="2"/>
+                <polygon points="260,320 280,330 260,340" fill="#333"/>
+                <line x1="280" y1="320" x2="280" y2="340" stroke="#333" stroke-width="3"/>
+                <text x="280" y="305" class="component-label" text-anchor="middle">D1</text>
+                <text x="280" y="370" class="value-label" text-anchor="middle">1N4007 or</text>
+                <text x="280" y="385" class="value-label" text-anchor="middle">Schottky 1A+</text>
+            </g>
+            
+            <!-- Diode terminals -->
+            <circle cx="240" cy="330" r="4" fill="#f44336"/>
+            <text x="225" y="333" class="pin-label" text-anchor="end">A</text>
+            <circle cx="320" cy="330" r="4" fill="#f44336"/>
+            <text x="335" y="333" class="pin-label">C</text>
+            
+            <!-- Capacitor -->
+            <g>
+                <rect x="720" y="180" width="60" height="100" class="component capacitor" rx="3"/>
+                <line x1="735" y1="200" x2="735" y2="260" stroke="#333" stroke-width="2"/>
+                <line x1="765" y1="200" x2="765" y2="260" stroke="#333" stroke-width="2"/>
+                <text x="750" y="195" class="component-label" text-anchor="middle">C1</text>
+                <text x="750" y="290" class="value-label" text-anchor="middle">470µF</text>
+                <text x="750" y="305" class="value-label" text-anchor="middle">16V</text>
+            </g>
+            
+            <!-- Capacitor terminals -->
+            <circle cx="735" cy="190" r="4" fill="#f44336"/>
+            <text x="720" y="188" class="pin-label" text-anchor="end">+</text>
+            <circle cx="765" cy="270" r="4" fill="#000"/>
+            <text x="780" y="273" class="pin-label">-</text>
+            
+            <!-- NeoPixel Strip -->
+            <rect x="720" y="400" width="200" height="120" class="component neopixel" rx="5"/>
+            <text x="820" y="440" class="component-label" text-anchor="middle">NeoPixel Strip</text>
+            <text x="820" y="460" class="value-label" text-anchor="middle">20 LEDs (WS2812B)</text>
+            
+            <!-- NeoPixel Pins -->
+            <circle cx="730" cy="490" r="4" fill="#f44336"/>
+            <text x="740" y="495" class="pin-label">5V</text>
+            <circle cx="820" cy="490" r="4" fill="#000"/>
+            <text x="830" y="495" class="pin-label">GND</text>
+            <circle cx="910" cy="490" r="4" fill="#2196f3"/>
+            <text x="895" y="485" class="pin-label" text-anchor="end">DIN</text>
+            
+            <!-- Wiring: USB-C 5V splits to two paths -->
+            <path d="M 80 150 L 80 200" class="wire-5v"/>
+            <!-- Junction point -->
+            <circle cx="80" cy="200" r="5" fill="#f44336"/>
+            
+            <!-- Wiring: USB-C 5V to Diode (for ESP32) -->
+            <path d="M 80 200 L 240 200 L 240 330" class="wire-5v"/>
+            
+            <!-- Wiring: Diode to ESP32 5V/VIN -->
+            <path d="M 320 330 L 320 340 L 360 340" class="wire-5v" marker-end="url(#arrowred)"/>
+            
+            <!-- Wiring: USB-C 5V to Capacitor (for NeoPixels) -->
+            <path d="M 80 200 L 735 200 L 735 190" class="wire-5v"/>
+            
+            <!-- Wiring: Capacitor to NeoPixels -->
+            <path d="M 735 200 L 735 380 L 730 380 L 730 490" class="wire-5v"/>
+            
+            <!-- Wiring: USB-C GND to ESP32 -->
+            <path d="M 170 150 L 170 220 L 300 220 L 300 360 L 360 360" class="wire-gnd"/>
+            
+            <!-- Wiring: GND to Capacitor -->
+            <path d="M 300 220 L 765 220 L 765 270" class="wire-gnd"/>
+            
+            <!-- Wiring: GND to NeoPixels -->
+            <path d="M 765 270 L 765 400 L 820 400 L 820 490" class="wire-gnd"/>
+            
+            <!-- Wiring: Button 1 to ESP32 GPIO9 -->
+            <path d="M 250 395 L 280 395 L 280 380 L 360 380" class="wire-data" stroke="#ff9800"/>
+            
+            <!-- Wiring: Button 1 to GND -->
+            <path d="M 170 420 L 170 440 L 300 440 L 300 360 L 360 360" class="wire-gnd"/>
+            
+            <!-- Wiring: Button 2 to ESP32 GPIO10 -->
+            <path d="M 250 475 L 265 475 L 265 400 L 360 400" class="wire-data" stroke="#ff9800"/>
+            
+            <!-- Wiring: Button 2 to GND -->
+            <path d="M 170 500 L 170 520 L 300 520 L 300 360" class="wire-gnd"/>
+            
+            <!-- Wiring: ESP32 GPIO to Resistor -->
+            <path d="M 520 320 L 580 320" class="wire-data"/>
+            
+            <!-- Wiring: Resistor to NeoPixels -->
+            <path d="M 660 320 L 910 320 L 910 490" class="wire-data"/>
+            
+            <!-- Labels on wires -->
+            <text x="150" y="195" class="label label-5v">5V Power</text>
+            <text x="210" y="215" class="label label-gnd">Common GND</text>
+            <text x="540" y="310" class="label label-data">Data Signal</text>
+            
+            <!-- Arrow markers -->
+            <defs>
+                <marker id="arrowred" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                    <path d="M0,0 L0,6 L9,3 z" fill="#f44336" />
+                </marker>
+            </defs>
+        </svg>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-line v5"></div>
+                <span>5V Power</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-line gnd"></div>
+                <span>Ground (GND)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-line data"></div>
+                <span>Data Signal (3.3V)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-line" style="background: #ff9800; width: 40px; height: 3px;"></div>
+                <span>Button Control</span>
+            </div>
+        </div>
+        
+        <div class="note">
+            <h3>⚠️ Important Notes:</h3>
+            <ul>
+                <li><strong>Button connections:</strong> Both buttons connect between GPIO and GND. The ESP32 uses internal pullup resistors, so when a button is pressed, it connects the GPIO to GND (active LOW). No external resistors needed!</li>
+                <li><strong>Button functions:</strong>
+                    <ul>
+                        <li><strong>Button 1 (GPIO9):</strong> Cycles through effects - All On, Rainbow, Color Wipe, Theater Chase, Pulse, Running Light, Off</li>
+                        <li><strong>Button 2 (GPIO10):</strong> Changes colors - Red, Green, Blue, Yellow, Magenta, Cyan, Orange, Purple, White</li>
+                    </ul>
+                </li>
+                <li><strong>Button hardware:</strong> Use momentary push buttons (tactile switches). Simple 2-pin or 4-pin tactile buttons work perfectly. No need for fancy switches!</li>
+                <li><strong>Diode protection (D1):</strong> The diode on the ESP32's power line prevents backfeeding when programming. When you connect the ESP32 to your computer via USB, the diode blocks power from flowing back to the shared 5V rail, keeping the NeoPixels OFF automatically. No switch needed!</li>
+                <li><strong>Diode selection:</strong> Since the ESP32 only draws ~200-300mA, even a 1N4007 works fine here (despite the 0.7V drop). For better performance, use a Schottky diode like 1N5817 or 1N5819 (1A rating is plenty).</li>
+                <li><strong>Diode polarity:</strong> CRITICAL - Anode (unmarked end) connects to USB-C breakout 5V, Cathode (marked with stripe) connects to ESP32 5V/VIN pin. Wrong polarity = no power to ESP32!</li>
+                <li><strong>How it works:</strong>
+                    <ul>
+                        <li><strong>Programming mode:</strong> ESP32 USB to computer → Diode blocks reverse current → NeoPixels stay OFF ✅</li>
+                        <li><strong>Running mode:</strong> USB-C breakout to power supply → Diode allows forward current → Everything powers up ✅</li>
+                    </ul>
+                </li>
+                <li><strong>Capacitor placement:</strong> Install the 470µF capacitor as close as possible to the NeoPixel strip's power input. This prevents voltage spikes when LEDs change colors.</li>
+                <li><strong>Capacitor polarity:</strong> The capacitor is polarized - connect + to 5V and - to GND. Wrong polarity can cause it to fail or explode.</li>
+                <li><strong>Resistor:</strong> The 470Ω resistor protects the first LED and improves signal integrity. Place it between ESP32 GPIO8 and NeoPixel DIN.</li>
+                <li><strong>GPIO pin selection:</strong> GPIO8 for NeoPixels, GPIO9 and GPIO10 for buttons. Avoid GPIO2/GPIO9 which have special boot functions (though GPIO9 is okay for button input with pullup).</li>
+                <li><strong>Common ground is critical:</strong> All ground connections must be tied together for proper signal communication between ESP32 and NeoPixels.</li>
+                <li><strong>Logic level:</strong> ESP32-C3 outputs 3.3V logic. Most NeoPixels work fine with this, but if you see flickering or color issues, add a logic level shifter (3.3V → 5V).</li>
+                <li><strong>Wire gauge:</strong> Use adequate wire gauge for power (20-22 AWG recommended for ~1.5A current draw).</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
