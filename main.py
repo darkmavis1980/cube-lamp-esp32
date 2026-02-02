@@ -110,6 +110,7 @@ effect_names = [
     "Chase",
     "Pulse",
     "Runner",
+    "Aurora",
     "Off"
 ]
 
@@ -127,14 +128,16 @@ def update_display():
         oled.text(f"Mode: {effect_text}", 0, 0)
         
         # Line 2: Color name
-        if current_effect != 1 and current_effect != 6:  # Not Rainbow or Off
+        if current_effect != 1 and current_effect != 6 and current_effect != 7:  # Not Rainbow, Aurora, or Off
             color_text = color_names[current_color_index]
             oled.text(f"Color: {color_text}", 0, 12)
         elif current_effect == 1:
             oled.text("Color: Rainbow", 0, 12)
-        
+        elif current_effect == 6:
+            oled.text("Color: Aurora", 0, 12)
+
         # Line 3: Status
-        if current_effect == 6:
+        if current_effect == 7:
             oled.text("Status: OFF", 0, 24)
         else:
             oled.text(f"LEDs: {LED_COUNT}", 0, 24)
@@ -294,6 +297,38 @@ def effect_running_light():
         set_color(i, r, g, b)
         time.sleep(0.05)
 
+def effect_aurora():
+    """Aurora effect — smoothly blend through green, cyan, blue, and purple across the strip"""
+    # Aurora palette: greens, teals, blues, purples
+    aurora_colors = [
+        (0, 255, 80),     # Green
+        (0, 255, 180),    # Teal
+        (0, 200, 255),    # Cyan
+        (0, 100, 255),    # Sky blue
+        (80, 0, 255),     # Blue-purple
+        (150, 0, 200),    # Purple
+        (0, 180, 130),    # Sea green
+    ]
+    palette_len = len(aurora_colors)
+    offset = 0
+    while True:
+        if check_buttons():
+            return
+        for i in range(LED_COUNT):
+            # Map each LED to a position in the palette with smooth blending
+            pos = ((i * palette_len * 256) // LED_COUNT + offset) % (palette_len * 256)
+            idx = pos // 256
+            frac = pos % 256
+            c1 = aurora_colors[idx]
+            c2 = aurora_colors[(idx + 1) % palette_len]
+            r = (c1[0] * (256 - frac) + c2[0] * frac) >> 8
+            g = (c1[1] * (256 - frac) + c2[1] * frac) >> 8
+            b = (c1[2] * (256 - frac) + c2[2] * frac) >> 8
+            np[i] = (int(r * 0.2), int(g * 0.2), int(b * 0.2))
+        np.write()
+        offset = (offset + 3) % (palette_len * 256)
+        time.sleep(0.03)
+
 def effect_off():
     """Turn all LEDs off"""
     clear()
@@ -332,7 +367,9 @@ while True:
         effect_pulse()
     elif current_effect == 5:  # Running Light
         effect_running_light()
-    elif current_effect == 6:  # Off
+    elif current_effect == 6:  # Aurora
+        effect_aurora()
+    elif current_effect == 7:  # Off
         effect_off()
     
     time.sleep(0.01)  # Small delay between effect loops
