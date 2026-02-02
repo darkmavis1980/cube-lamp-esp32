@@ -184,7 +184,7 @@ def clear():
         np[i] = (0, 0, 0)
     np.write()
 
-def set_color(index, r, g, b, brightness=0.2):
+def set_color(index, r, g, b, brightness=0.3):
     """Set a single LED to a color with brightness control (0.0 to 1.0)"""
     r = int(r * brightness)
     g = int(g * brightness)
@@ -192,7 +192,7 @@ def set_color(index, r, g, b, brightness=0.2):
     np[index] = (r, g, b)
     np.write()
 
-def set_all(r, g, b, brightness=0.2):
+def set_all(r, g, b, brightness=0.3):
     """Set all LEDs to the same color"""
     r = int(r * brightness)
     g = int(g * brightness)
@@ -275,7 +275,7 @@ def effect_rainbow_cycle():
         for i in range(LED_COUNT):
             pixel_index = (i * 256 // LED_COUNT) + j
             r, g, b = wheel(pixel_index & 255)
-            set_color(i, r, g, b, brightness=0.2)
+            set_color(i, r, g, b, brightness=0.3)
         time.sleep(0.01)
 
 def effect_color_wipe():
@@ -370,7 +370,7 @@ def effect_aurora():
             r = (c1[0] * (256 - frac) + c2[0] * frac) >> 8
             g = (c1[1] * (256 - frac) + c2[1] * frac) >> 8
             b = (c1[2] * (256 - frac) + c2[2] * frac) >> 8
-            np[i] = (int(r * 0.2), int(g * 0.2), int(b * 0.2))
+            np[i] = (int(r * 0.3), int(g * 0.3), int(b * 0.3))
         np.write()
         offset = (offset + 3) % (palette_len * 256)
         time.sleep(0.03)
