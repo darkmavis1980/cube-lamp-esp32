@@ -7,7 +7,7 @@ MicroPython project for controlling 24 WS2812B NeoPixels with an OLED display an
 ## Project Overview
 
 A standalone NeoPixel controller with:
-- 24 WS2812B NeoPixel LEDs
+- 66 WS2812B NeoPixel LEDs
 - 0.91" SSD1306 OLED display (I2C, 128x32)
 - 2 momentary push buttons (mode + color)
 - USB-C breakout board for shared power delivery
@@ -74,7 +74,7 @@ The code handles a missing driver gracefully — it will print a warning and run
 ### Files to upload to ESP32
 
 ```
-main.py          ← rename neopixel_test.py to this, runs automatically on boot
+main.py          ← runs automatically on boot
 ssd1306.py       ← OLED driver, download from link above
 ```
 
@@ -82,7 +82,7 @@ ssd1306.py       ← OLED driver, download from link above
 
 ## Code Structure
 
-Everything lives in a single file (`neopixel_test.py`). Structure:
+Everything lives in a single file (`main.py`). Structure:
 
 1. **Imports & pin definitions** — all GPIO assignments at the top, change them here only
 2. **OLED initialization** — I2C scan + SSD1306 setup, gracefully disabled if not found
@@ -105,7 +105,7 @@ Just append an `(R, G, B)` tuple to `colors[]` and the matching name string to `
 
 ### Adjusting brightness
 
-Global brightness is controlled via the `brightness` parameter in `set_color()` and `set_all()`. Default is `0.2` (20%). The pulse effect ramps up to `0.5` (50%). For full white at high brightness, keep it ≤ 0.3 to stay within your power supply headroom.
+Global brightness is controlled via the `brightness` parameter in `set_color()` and `set_all()`. Default is `0.3` (30%). For full white at high brightness, keep it ≤ 0.3 to stay within your power supply headroom.
 
 ---
 

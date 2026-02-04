@@ -4,7 +4,7 @@ A MicroPython project for controlling WS2812B NeoPixels with an OLED display and
 
 ## Features
 
-- **6 LED effects:** All On, Rainbow Cycle, Color Wipe, Theater Chase, Pulse, Running Light
+- **10 LED effects:** All On, Aurora, Color Wipe, Ocean, Candle, Runner, Rainbow, Fire, Breathing, Off
 - **9 colors:** Red, Green, Blue, Yellow, Magenta, Cyan, Orange, Purple, White
 - **OLED display** showing current effect, color, and LED count
 - **Two-button control** — one for cycling effects, one for changing colors

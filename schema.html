@@ -117,7 +117,7 @@
 <body>
     <div class="container">
         <h1>ESP32-C3 SuperMini + NeoPixel + OLED Display Wiring Diagram</h1>
-        <div class="subtitle">24 LEDs + 0.91" OLED + 2 Buttons with USB-C Power (5V, 2-3A) + Diode Protection</div>
+        <div class="subtitle">66 LEDs + 0.91" OLED + 2 Buttons with USB-C Power (5V, 2-3A) + Diode Protection</div>
         
         <svg viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg">
             <!-- USB-C Breakout -->
@@ -241,7 +241,7 @@
             <!-- NeoPixel Strip -->
             <rect x="720" y="400" width="200" height="120" class="component neopixel" rx="5"/>
             <text x="820" y="440" class="component-label" text-anchor="middle">NeoPixel Strip</text>
-            <text x="820" y="460" class="value-label" text-anchor="middle">20 LEDs (WS2812B)</text>
+            <text x="820" y="460" class="value-label" text-anchor="middle">66 LEDs (WS2812B)</text>
             
             <!-- NeoPixel Pins -->
             <circle cx="730" cy="490" r="4" fill="#f44336"/>
@@ -364,7 +364,7 @@
                 <li><strong>Button connections:</strong> Both buttons connect between GPIO and GND. The ESP32 uses internal pullup resistors, so when a button is pressed, it connects the GPIO to GND (active LOW). No external resistors needed!</li>
                 <li><strong>Button functions:</strong>
                     <ul>
-                        <li><strong>Button 1 (GPIO10):</strong> Cycles through effects - All On, Rainbow, Color Wipe, Chase, Pulse, Runner, Off</li>
+                        <li><strong>Button 1 (GPIO10):</strong> Cycles through effects - All On, Aurora, Color Wipe, Ocean, Candle, Runner, Rainbow, Fire, Breathing, Off</li>
                         <li><strong>Button 2 (GPIO20):</strong> Changes colors - Red, Green, Blue, Yellow, Magenta, Cyan, Orange, Purple, White</li>
                     </ul>
                 </li>
