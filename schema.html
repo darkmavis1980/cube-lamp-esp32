@@ -116,8 +116,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>ESP32-C3 SuperMini + NeoPixel Wiring Diagram with Button Controls</h1>
-        <div class="subtitle">24 LEDs with USB-C Power Supply (5V, 2-3A) + Automatic Diode Protection + 2 Control Buttons</div>
+        <h1>ESP32-C3 SuperMini + NeoPixel + OLED Display Wiring Diagram</h1>
+        <div class="subtitle">24 LEDs + 0.91" OLED + 2 Buttons with USB-C Power (5V, 2-3A) + Diode Protection</div>
         
         <svg viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg">
             <!-- USB-C Breakout -->
@@ -133,21 +133,47 @@
             <text x="150" y="155" class="pin-label" text-anchor="end">GND</text>
             
             <!-- ESP32-C3 -->
-            <rect x="350" y="250" width="180" height="180" class="component esp32" rx="5"/>
+            <rect x="350" y="250" width="180" height="220" class="component esp32" rx="5"/>
             <text x="440" y="290" class="component-label" text-anchor="middle">ESP32-C3</text>
             <text x="440" y="310" class="component-label" text-anchor="middle">SuperMini</text>
             
             <!-- ESP32 Pins -->
             <circle cx="360" cy="340" r="4" fill="#f44336"/>
-            <text x="370" y="345" class="pin-label">5V/VIN</text>
+            <text x="370" y="345" class="pin-label">5V</text>
             <circle cx="360" cy="360" r="4" fill="#000"/>
             <text x="370" y="365" class="pin-label">GND</text>
             <circle cx="520" cy="320" r="4" fill="#2196f3"/>
-            <text x="510" y="315" class="pin-label" text-anchor="end">GPIO8</text>
+            <text x="510" y="315" class="pin-label" text-anchor="end">GPIO5</text>
             <circle cx="360" cy="380" r="4" fill="#ff9800"/>
-            <text x="370" y="385" class="pin-label">GPIO9</text>
+            <text x="370" y="385" class="pin-label">GPIO10</text>
             <circle cx="360" cy="400" r="4" fill="#ff9800"/>
-            <text x="370" y="405" class="pin-label">GPIO10</text>
+            <text x="370" y="405" class="pin-label">GPIO20</text>
+            <circle cx="520" cy="420" r="4" fill="#9c27b0"/>
+            <text x="510" y="415" class="pin-label" text-anchor="end">GPIO9 (SCL)</text>
+            <circle cx="520" cy="440" r="4" fill="#9c27b0"/>
+            <text x="510" y="435" class="pin-label" text-anchor="end">GPIO8 (SDA)</text>
+            <circle cx="520" cy="380" r="4" fill="#4caf50"/>
+            <text x="510" y="375" class="pin-label" text-anchor="end">3.3V</text>
+            
+            <!-- OLED Display -->
+            <g>
+                <rect x="620" y="360" width="140" height="100" class="component" rx="3" fill="#1a237e"/>
+                <rect x="635" y="375" width="110" height="60" fill="#4fc3f7"/>
+                <text x="690" y="405" class="component-label" text-anchor="middle" fill="#fff" font-size="14">OLED</text>
+                <text x="690" y="420" class="value-label" text-anchor="middle" fill="#fff" font-size="11">0.91" 128x32</text>
+                <text x="690" y="350" class="component-label" text-anchor="middle">Display</text>
+                <text x="690" y="475" class="value-label" text-anchor="middle">SSD1306 I2C</text>
+            </g>
+            
+            <!-- OLED Pins -->
+            <circle cx="620" cy="380" r="4" fill="#4caf50"/>
+            <text x="605" y="383" class="pin-label" text-anchor="end">VCC</text>
+            <circle cx="620" cy="400" r="4" fill="#000"/>
+            <text x="605" y="403" class="pin-label" text-anchor="end">GND</text>
+            <circle cx="620" cy="420" r="4" fill="#9c27b0"/>
+            <text x="605" y="423" class="pin-label" text-anchor="end">SCL</text>
+            <circle cx="620" cy="440" r="4" fill="#9c27b0"/>
+            <text x="605" y="443" class="pin-label" text-anchor="end">SDA</text>
             
             <!-- Button 1 -->
             <g>
@@ -157,7 +183,7 @@
                 <text x="200" y="405" class="value-label" text-anchor="middle">Mode</text>
             </g>
             <circle cx="250" cy="395" r="4" fill="#ff9800"/>
-            <text x="255" y="398" class="pin-label">GPIO9</text>
+            <text x="255" y="398" class="pin-label">GPIO10</text>
             <circle cx="170" cy="420" r="4" fill="#000"/>
             <text x="175" y="423" class="pin-label">GND</text>
             
@@ -169,7 +195,7 @@
                 <text x="200" y="485" class="value-label" text-anchor="middle">Color</text>
             </g>
             <circle cx="250" cy="475" r="4" fill="#ff9800"/>
-            <text x="255" y="478" class="pin-label">GPIO10</text>
+            <text x="255" y="478" class="pin-label">GPIO20</text>
             <circle cx="170" cy="500" r="4" fill="#000"/>
             <text x="175" y="503" class="pin-label">GND</text>
             
@@ -251,17 +277,29 @@
             <!-- Wiring: GND to NeoPixels -->
             <path d="M 765 270 L 765 400 L 820 400 L 820 490" class="wire-gnd"/>
             
-            <!-- Wiring: Button 1 to ESP32 GPIO9 -->
+            <!-- Wiring: Button 1 to ESP32 GPIO10 -->
             <path d="M 250 395 L 280 395 L 280 380 L 360 380" class="wire-data" stroke="#ff9800"/>
             
             <!-- Wiring: Button 1 to GND -->
             <path d="M 170 420 L 170 440 L 300 440 L 300 360 L 360 360" class="wire-gnd"/>
             
-            <!-- Wiring: Button 2 to ESP32 GPIO10 -->
+            <!-- Wiring: Button 2 to ESP32 GPIO20 -->
             <path d="M 250 475 L 265 475 L 265 400 L 360 400" class="wire-data" stroke="#ff9800"/>
             
             <!-- Wiring: Button 2 to GND -->
             <path d="M 170 500 L 170 520 L 300 520 L 300 360" class="wire-gnd"/>
+            
+            <!-- Wiring: OLED VCC to ESP32 3.3V -->
+            <path d="M 520 380 L 550 380 L 550 380 L 620 380" stroke="#4caf50" stroke-width="3" fill="none"/>
+            
+            <!-- Wiring: OLED GND to ESP32 GND -->
+            <path d="M 620 400 L 580 400 L 580 360 L 360 360" class="wire-gnd"/>
+            
+            <!-- Wiring: OLED SCL to ESP32 GPIO6 -->
+            <path d="M 520 420 L 620 420" stroke="#9c27b0" stroke-width="3" fill="none"/>
+            
+            <!-- Wiring: OLED SDA to ESP32 GPIO7 -->
+            <path d="M 520 440 L 620 440" stroke="#9c27b0" stroke-width="3" fill="none"/>
             
             <!-- Wiring: ESP32 GPIO to Resistor -->
             <path d="M 520 320 L 580 320" class="wire-data"/>
@@ -299,35 +337,46 @@
                 <div class="legend-line" style="background: #ff9800; width: 40px; height: 3px;"></div>
                 <span>Button Control</span>
             </div>
+            <div class="legend-item">
+                <div class="legend-line" style="background: #9c27b0; width: 40px; height: 3px;"></div>
+                <span>I2C (Display)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-line" style="background: #4caf50; width: 40px; height: 3px;"></div>
+                <span>3.3V Power</span>
+            </div>
         </div>
         
         <div class="note">
             <h3>⚠️ Important Notes:</h3>
             <ul>
+                <li><strong>OLED Display (I2C):</strong> The 0.91" SSD1306 OLED connects via I2C protocol using the hardware I2C pins on ESP32-C3 SuperMini. Connect VCC to ESP32 3.3V, GND to common ground, SCL to GPIO9 (hardware SCL), and SDA to GPIO8 (hardware SDA). The display shows current effect and color selection.</li>
+                <li><strong>I2C Address:</strong> Most SSD1306 displays use address 0x3C, but some use 0x3D. The code will auto-detect. If your display doesn't work, try scanning for I2C devices.</li>
+                <li><strong>Pin assignments for ESP32-C3 SuperMini:</strong>
+                    <ul>
+                        <li>GPIO5 → NeoPixel DIN (through 470Ω resistor)</li>
+                        <li>GPIO8 → OLED SDA (hardware I2C)</li>
+                        <li>GPIO9 → OLED SCL (hardware I2C)</li>
+                        <li>GPIO10 → Button 1 (Mode)</li>
+                        <li>GPIO20 → Button 2 (Color)</li>
+                    </ul>
+                </li>
                 <li><strong>Button connections:</strong> Both buttons connect between GPIO and GND. The ESP32 uses internal pullup resistors, so when a button is pressed, it connects the GPIO to GND (active LOW). No external resistors needed!</li>
                 <li><strong>Button functions:</strong>
                     <ul>
-                        <li><strong>Button 1 (GPIO9):</strong> Cycles through effects - All On, Rainbow, Color Wipe, Theater Chase, Pulse, Running Light, Off</li>
-                        <li><strong>Button 2 (GPIO10):</strong> Changes colors - Red, Green, Blue, Yellow, Magenta, Cyan, Orange, Purple, White</li>
+                        <li><strong>Button 1 (GPIO10):</strong> Cycles through effects - All On, Rainbow, Color Wipe, Chase, Pulse, Runner, Off</li>
+                        <li><strong>Button 2 (GPIO20):</strong> Changes colors - Red, Green, Blue, Yellow, Magenta, Cyan, Orange, Purple, White</li>
                     </ul>
                 </li>
                 <li><strong>Button hardware:</strong> Use momentary push buttons (tactile switches). Simple 2-pin or 4-pin tactile buttons work perfectly. No need for fancy switches!</li>
                 <li><strong>Diode protection (D1):</strong> The diode on the ESP32's power line prevents backfeeding when programming. When you connect the ESP32 to your computer via USB, the diode blocks power from flowing back to the shared 5V rail, keeping the NeoPixels OFF automatically. No switch needed!</li>
                 <li><strong>Diode selection:</strong> Since the ESP32 only draws ~200-300mA, even a 1N4007 works fine here (despite the 0.7V drop). For better performance, use a Schottky diode like 1N5817 or 1N5819 (1A rating is plenty).</li>
                 <li><strong>Diode polarity:</strong> CRITICAL - Anode (unmarked end) connects to USB-C breakout 5V, Cathode (marked with stripe) connects to ESP32 5V/VIN pin. Wrong polarity = no power to ESP32!</li>
-                <li><strong>How it works:</strong>
-                    <ul>
-                        <li><strong>Programming mode:</strong> ESP32 USB to computer → Diode blocks reverse current → NeoPixels stay OFF ✅</li>
-                        <li><strong>Running mode:</strong> USB-C breakout to power supply → Diode allows forward current → Everything powers up ✅</li>
-                    </ul>
-                </li>
                 <li><strong>Capacitor placement:</strong> Install the 470µF capacitor as close as possible to the NeoPixel strip's power input. This prevents voltage spikes when LEDs change colors.</li>
                 <li><strong>Capacitor polarity:</strong> The capacitor is polarized - connect + to 5V and - to GND. Wrong polarity can cause it to fail or explode.</li>
-                <li><strong>Resistor:</strong> The 470Ω resistor protects the first LED and improves signal integrity. Place it between ESP32 GPIO8 and NeoPixel DIN.</li>
-                <li><strong>GPIO pin selection:</strong> GPIO8 for NeoPixels, GPIO9 and GPIO10 for buttons. Avoid GPIO2/GPIO9 which have special boot functions (though GPIO9 is okay for button input with pullup).</li>
-                <li><strong>Common ground is critical:</strong> All ground connections must be tied together for proper signal communication between ESP32 and NeoPixels.</li>
-                <li><strong>Logic level:</strong> ESP32-C3 outputs 3.3V logic. Most NeoPixels work fine with this, but if you see flickering or color issues, add a logic level shifter (3.3V → 5V).</li>
-                <li><strong>Wire gauge:</strong> Use adequate wire gauge for power (20-22 AWG recommended for ~1.5A current draw).</li>
+                <li><strong>Resistor:</strong> The 470Ω resistor protects the first LED and improves signal integrity. Place it between ESP32 GPIO5 and NeoPixel DIN.</li>
+                <li><strong>Common ground is critical:</strong> All ground connections must be tied together for proper communication.</li>
+                <li><strong>Power considerations:</strong> OLED draws ~20mA, buttons draw negligible current. Total system: ESP32 (~250mA) + LEDs (~1.4A at full brightness) + OLED (~20mA) = ~1.7A. Your 2-3A supply has good headroom!</li>
             </ul>
         </div>
     </div>
