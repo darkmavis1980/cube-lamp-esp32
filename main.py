@@ -112,12 +112,12 @@ color_names = ["Red", "Green", "Blue", "Yellow", "Magenta", "Cyan", "Orange", "P
 # Effect names
 effect_names = [
     "All On",
-    "Rainbow",
-    "Color Wipe",
-    "Chase",
-    "Pulse",
-    "Runner",
     "Aurora",
+    "Color Wipe",
+    "Ocean",
+    "Candle",
+    "Runner",
+    "Rainbow",
     "Fire",
     "Breathing",
     "Off"
@@ -164,14 +164,18 @@ def update_display():
         oled.text(f"Mode: {effect_text}", 0, 0)
         
         # Line 2: Color name
-        no_color_effects = {1, 6, 7, 9}  # Rainbow, Aurora, Fire, Off
+        no_color_effects = {1, 3, 4, 6, 7, 9}  # Aurora, Ocean, Candle, Rainbow, Fire, Off
         if current_effect not in no_color_effects:
             color_text = color_names[current_color_index]
             oled.text(f"Color: {color_text}", 0, 12)
-        elif current_effect == 1:
-            oled.text("Color: Rainbow", 0, 12)
         elif current_effect == 6:
+            oled.text("Color: Rainbow", 0, 12)
+        elif current_effect == 1:
             oled.text("Color: Aurora", 0, 12)
+        elif current_effect == 3:
+            oled.text("Color: Ocean", 0, 12)
+        elif current_effect == 4:
+            oled.text("Color: Candle", 0, 12)
         elif current_effect == 7:
             oled.text("Color: Fire", 0, 12)
 
@@ -300,37 +304,32 @@ def effect_color_wipe():
         set_color(i, 0, 0, 0)
         time.sleep(0.05)
 
-def effect_theater_chase():
-    """Movie theater light style chaser animation"""
-    r, g, b = colors[current_color_index]
-    for j in range(10):
+def effect_ocean():
+    """Gentle ocean wave effect with undulating blue/green"""
+    offset = 0
+    while True:
         if check_buttons():
             return
-        for q in range(3):
-            for i in range(0, LED_COUNT, 3):
-                if i + q < LED_COUNT:
-                    set_color(i + q, r, g, b)
-            time.sleep(0.05)
-            clear()
-            time.sleep(0.05)
+        for i in range(LED_COUNT):
+            wave = (math.sin((i + offset) * 0.3) + 1) / 2
+            r = 0
+            g = int(100 * wave * 0.3)
+            b = int((150 + 105 * wave) * 0.3)
+            np[i] = (r, g, b)
+        np.write()
+        offset += 0.2
+        time.sleep(0.03)
 
-def effect_pulse():
-    """Pulse all LEDs from dim to bright"""
-    r, g, b = colors[current_color_index]
-    steps = 50
-    for brightness in range(steps):
+def effect_candle():
+    """Subtle warm candle flicker effect"""
+    while True:
         if check_buttons():
             return
-        bright = brightness / steps
-        set_all(r, g, b, brightness=bright * 0.5)
-        time.sleep(0.02)
-    
-    for brightness in range(steps, 0, -1):
-        if check_buttons():
-            return
-        bright = brightness / steps
-        set_all(r, g, b, brightness=bright * 0.5)
-        time.sleep(0.02)
+        bright = 0.15 + random.random() * 0.15
+        # Warm orange-yellow
+        r, g, b = 255, 100 + random.randint(0, 50), 0
+        set_all(r, g, b, brightness=bright)
+        time.sleep(0.05 + random.random() * 0.1)
 
 def effect_running_light():
     """Single LED running back and forth"""
@@ -461,18 +460,18 @@ while True:
     # Run current effect
     if current_effect == 0:  # All On
         effect_all_on()
-    elif current_effect == 1:  # Rainbow Cycle
-        effect_rainbow_cycle()
+    elif current_effect == 1:  # Aurora
+        effect_aurora()
     elif current_effect == 2:  # Color Wipe
         effect_color_wipe()
-    elif current_effect == 3:  # Theater Chase
-        effect_theater_chase()
-    elif current_effect == 4:  # Pulse
-        effect_pulse()
+    elif current_effect == 3:  # Ocean
+        effect_ocean()
+    elif current_effect == 4:  # Candle
+        effect_candle()
     elif current_effect == 5:  # Running Light
         effect_running_light()
-    elif current_effect == 6:  # Aurora
-        effect_aurora()
+    elif current_effect == 6:  # Rainbow Cycle
+        effect_rainbow_cycle()
     elif current_effect == 7:  # Fire
         effect_fire()
     elif current_effect == 8:  # Breathing
