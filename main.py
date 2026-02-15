@@ -195,7 +195,7 @@ def clear():
         np[i] = (0, 0, 0)
     np.write()
 
-def set_color(index, r, g, b, brightness=0.3):
+def set_color(index, r, g, b, brightness=0.4):
     """Set a single LED to a color with brightness control (0.0 to 1.0)"""
     r = int(r * brightness)
     g = int(g * brightness)
@@ -203,7 +203,7 @@ def set_color(index, r, g, b, brightness=0.3):
     np[index] = (r, g, b)
     np.write()
 
-def set_all(r, g, b, brightness=0.3):
+def set_all(r, g, b, brightness=0.4):
     """Set all LEDs to the same color"""
     r = int(r * brightness)
     g = int(g * brightness)
@@ -286,7 +286,7 @@ def effect_rainbow_cycle():
         for i in range(LED_COUNT):
             pixel_index = (i * 256 // LED_COUNT) + j
             r, g, b = wheel(pixel_index & 255)
-            set_color(i, r, g, b, brightness=0.3)
+            set_color(i, r, g, b, brightness=0.4)
         time.sleep(0.01)
 
 def effect_color_wipe():
@@ -425,7 +425,7 @@ def effect_breathing():
             return
         # Sine wave from 0.0 to 1.0
         bright = (math.sin(step) + 1.0) / 2.0
-        set_all(r, g, b, brightness=bright * 0.3)
+        set_all(r, g, b, brightness=bright * 0.4)
         step += 0.04
         if step > 2 * math.pi:
             step -= 2 * math.pi
